@@ -6,7 +6,8 @@ package com.nirisha.nirishaoptics.api;
 
 public enum NirishaAPI {
 
-    API_REGISTER("https://nirisha1q2w3e.000webhostapp.com/CoreService.php?key=register");
+    API_REGISTER("https://nirisha1q2w3e.000webhostapp.com/CoreService.php?key=register"),
+    API_LOGIN("https://nirisha1q2w3e.000webhostapp.com/CoreService.php?key=login");
 
     private String text;
     private NirishaAPI(String text){this.text=text;}

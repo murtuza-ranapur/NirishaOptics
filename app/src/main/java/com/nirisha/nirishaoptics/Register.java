@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
+import com.nirisha.nirishaoptics.services.Validator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
     private TextView tv_login;
     private Button btn_register;
-    private EditText et_fname,et_lname,et_email,et_password,et_mobile;
+    private EditText et_fname,et_lname,et_email,et_password,et_mobile,et_repass;
     private JSONObject regObj;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +38,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         et_password=(EditText)findViewById(R.id.et_pass);
         et_email=(EditText)findViewById(R.id.et_reg_email);
         et_mobile=(EditText)findViewById(R.id.et_mob);
+        et_repass=(EditText)findViewById(R.id.et_repass);
     }
 
     @Override
@@ -47,8 +49,50 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             startActivity(intent);
         }
         else if(view==btn_register){
+            boolean flag=true;
             regObj =new JSONObject();
             try {
+                if(Validator.forEmpty(et_fname.getText().toString()))
+                    flag &=true;
+                else {
+                    flag &=false;
+                    et_fname.setError(Validator.getErrorMessage());
+                }
+
+                if(Validator.forEmpty(et_lname.getText().toString()))
+                    flag &=true;
+                else {
+                    flag &=false;
+                    et_lname.setError(Validator.getErrorMessage());
+                }
+
+                if(Validator.forEmail(et_email.getText().toString()))
+                    flag &=true;
+                else {
+                    flag &=false;
+                    et_email.setError(Validator.getErrorMessage());
+                }
+
+                if(Validator.forPassword(et_password.getText().toString(),8))
+                    flag &=true;
+                else {
+                    flag &=false;
+                    et_password.setError(Validator.getErrorMessage());
+                }
+
+                if(Validator.forLength(et_mobile.getText().toString(),10))
+                    flag &=true;
+                else {
+                    flag &=false;
+                    et_mobile.setError(Validator.getErrorMessage());
+                }
+
+                if(et_repass.getText().toString().equals(et_password.getText().toString()))
+                    flag &=true;
+                else {
+                    flag &= false;
+                    et_repass.setError("Passwords doesn't Match");
+                }
                 regObj.put("fname",et_fname.getText());
                 regObj.put("lname",et_lname.getText());
                 regObj.put("email",et_email.getText());
@@ -58,8 +102,10 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            NirishaAPIUtil util=NirishaAPIUtil.getInstance();
-            util.doRegister(regObj,this);
+            if(flag) {
+                NirishaAPIUtil util = NirishaAPIUtil.getInstance();
+                util.doRegister(regObj, this);
+            }
         }
     }
 }
