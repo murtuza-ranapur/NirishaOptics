@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_dark"
+    tools:context="com.nirisha.nirishaoptics.Summary">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_title_2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:cardBackgroundColor="@color/floatLabel"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_title_summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/floatLabel"
+            android:gravity="center"
+            android:text="Order Summary"
+            android:textColor="@android:color/white"
+            android:textSize="35sp" />
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="368dp"
+        android:layout_height="500dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card_title_2">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Product"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sum_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="GENX DIGITAL TRANSITION BROWN PROG"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@+id/tv_1"
+                app:layout_constraintTop_toBottomOf="@+id/tv_1"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Coating"
+                app:layout_constraintLeft_toLeftOf="@id/tv_sum_product"
+                app:layout_constraintTop_toBottomOf="@+id/tv_sum_product"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <TextView
+                android:id="@+id/tv_coating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="24 KARAT HYDROPHOBIC"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_2"
+                app:layout_constraintTop_toBottomOf="@+id/tv_2"
+                tools:layout_editor_absoluteX="16dp" />
+
+            <TextView
+                android:id="@+id/tv_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Eye"
+                app:layout_constraintHorizontal_bias="0.714"
+                app:layout_constraintLeft_toRightOf="@+id/tv_2"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sum_product"
+                android:layout_marginTop="8dp" />
+
+            <TextView
+                android:id="@+id/tv_eye"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Left"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_3"
+                app:layout_constraintLeft_toLeftOf="@id/tv_3" />
+
+            <TextView
+                android:id="@+id/tv_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Index"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_coating"
+                app:layout_constraintLeft_toLeftOf="@id/tv_2" />
+
+            <TextView
+                android:id="@+id/tv_index"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.468"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="16dp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_4"
+                app:layout_constraintTop_toBottomOf="@+id/tv_4" />
+
+            <TextView
+                android:id="@+id/tv_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Diameter"
+                app:layout_constraintLeft_toRightOf="@+id/tv_4"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_coating"
+                app:layout_constraintRight_toLeftOf="@+id/tv_6"
+                android:layout_marginRight="8dp" />
+
+            <TextView
+                android:id="@+id/tv_dia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="55"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_5"
+                app:layout_constraintTop_toBottomOf="@+id/tv_5" />
+
+            <TextView
+                android:id="@+id/tv_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sphere"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/tv_coating"
+                android:layout_marginRight="24dp"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_sphere"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-10.00"
+                android:textColor="@color/floatLabel"
+                android:textSize="18sp"
+                android:layout_marginTop="4dp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_6"
+                app:layout_constraintTop_toBottomOf="@+id/tv_6" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+
+</android.support.constraint.ConstraintLayout>

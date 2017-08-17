@@ -3,6 +3,8 @@ package com.nirisha.nirishaoptics;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.constraint.ConstraintLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText et_email, et_password;
     private JSONObject logObject;
     private Intent intent;
+    private ConstraintLayout activity_main;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_signin.setOnClickListener(this);
         login.setOnClickListener(this);
 
-        SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
-        if(sp.getString("id",null)!=null) {
-            intent = new Intent(this, Order.class);
-            finish();
-            startActivity(intent);
-        }
+//        SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
+//        if(sp.getString("id",null)!=null) {
+//            intent = new Intent(this, Order.class);
+//            finish();
+//            startActivity(intent);
+//        }
     }
 
     private void findAllElements() {
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login=(Button)findViewById(R.id.btn_login);
         et_email=(EditText)findViewById(R.id.et_email);
         et_password=(EditText)findViewById(R.id.et_password);
+        activity_main=(ConstraintLayout)findViewById(R.id.activity_main);
     }
 
     @Override
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(intent);
         }
         else if(view==login){
+            activity_main.setBackgroundColor(ContextCompat.getColor(this,R.color.background_dark));
             logObject =new JSONObject();
             boolean flag=true;
             try {

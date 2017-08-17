@@ -17,4 +17,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!--Floating label text style-->
+    <style name="HintText" parent="TextAppearance.AppCompat.Small">
+        <item name="android:textColor">@color/floatLabel</item>
+    </style>
+
+    <!--Input field style-->
+    <style name="MatEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/normal</item>
+        <item name="colorControlActivated">@color/floatLabel</item>
+    </style>
+
 </resources>

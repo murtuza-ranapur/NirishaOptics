@@ -1,10 +1,16 @@
 package com.nirisha.nirishaoptics.services;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+
+import com.nirisha.nirishaoptics.Pojo.DynamicValues;
+import com.nirisha.nirishaoptics.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by hp on 13-08-2017.
@@ -24,12 +30,15 @@ public class ValueAdapter {
     public static final String ADDITION="addition";
     public static final String HEIGHT="height";
 
+    public static final String STATES="states";
+
 
     private static String [] eye={"Left","Right"};
 
     private static String [] index={"1.498","1.56","1.6","1.67","1.74"};
 
     private static String [] diameter={"55","60","65","70"};
+    private static String [] height={"13","15","17","19"};
     public static ArrayAdapter<String> getAdapter(Context context,String view){
         switch (view)
         {
@@ -38,12 +47,16 @@ public class ValueAdapter {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case TYPE:
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,DynamicValues.getInstance().getProduct());
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case INDEX:
                 adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,index);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case COATING:
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,DynamicValues.getInstance().getCoating());
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case DIAMETER:
                 adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,diameter);
@@ -57,15 +70,44 @@ public class ValueAdapter {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case CYLINDER:
+                List<String> cylinder=new ArrayList<>();
+                for(double i=-4.50;i<=4.50;i+=0.25)
+                    cylinder.add(String.valueOf(i));
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,cylinder);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case AXIS:
+                List<String> axis=new ArrayList<>();
+                for(int i=0;i<=180;i++)
+                    axis.add(String.valueOf(i));
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,axis);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case ADDITION:
+                List<String> addition=new ArrayList<>();
+                for(double i=0.0;i<=3.50;i+=0.25)
+                    addition.add(String.valueOf(i));
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,addition);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case HEIGHT:
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,height);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
-
+            case STATES:
+                String [] states=context.getResources().getStringArray(R.array.india_states);
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,states);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                return adapter;
         }
         return null;
     }
+
+    public static int defaultValueService(String defValue, Spinner spinner){
+        int position;
+        ArrayAdapter<String> adapter =(ArrayAdapter<String>)spinner.getAdapter();
+        position=adapter.getPosition(defValue);
+        return position;
+    }
+
 }
