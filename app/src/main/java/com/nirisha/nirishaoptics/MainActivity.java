@@ -41,12 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_signin.setOnClickListener(this);
         login.setOnClickListener(this);
 
-//        SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
-//        if(sp.getString("id",null)!=null) {
-//            intent = new Intent(this, Order.class);
-//            finish();
-//            startActivity(intent);
-//        }
+        SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
+        if(sp.getString("id",null)!=null) {
+            intent = new Intent(this, Order.class);
+            finish();
+            startActivity(intent);
+        }
     }
 
     private void findAllElements() {
