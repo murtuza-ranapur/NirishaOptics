@@ -1,7 +1,15 @@
 package com.nirisha.nirishaoptics.Pojo;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by hp on 15-08-2017.
@@ -11,7 +19,7 @@ public class DynamicValues {
     private List<String> product=new ArrayList<>();
     private List<String> coating=new ArrayList<>();
     private volatile boolean flag=false;
-
+    private SQLiteDatabase nirisha;
     private DynamicValues(){}
     private static class DynamicValuesHelper{
         private static final DynamicValues INSTANCE=new DynamicValues();
@@ -20,8 +28,19 @@ public class DynamicValues {
         return DynamicValuesHelper.INSTANCE;
     }
 
-    public List<String> getProduct() {
-        return product;
+    public void init(Context context){
+        nirisha = context.openOrCreateDatabase("nirisha",MODE_PRIVATE,null);
+    }
+    public List<String> getProduct()
+    {
+        List<String> prods=new ArrayList<>();
+        Cursor r=nirisha.rawQuery("select distinct product from product",null);
+        r.moveToFirst();
+        while(!r.isAfterLast()){
+            prods.add(r.getString(0));
+            r.moveToNext();
+        }
+        return prods;
     }
 
     public void setProduct(List<String> product) {

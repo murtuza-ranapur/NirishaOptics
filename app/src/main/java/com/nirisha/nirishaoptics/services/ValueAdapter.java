@@ -47,7 +47,9 @@ public class ValueAdapter {
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case TYPE:
-                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,DynamicValues.getInstance().getProduct());
+                DynamicValues dv=DynamicValues.getInstance();
+                dv.init(context);
+                adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,dv.getProduct());
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 return adapter;
             case INDEX:

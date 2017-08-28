@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +14,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nirisha.nirishaoptics.Pojo.DynamicValues;
 import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
 import com.nirisha.nirishaoptics.services.Validator;
 import com.nirisha.nirishaoptics.services.ValueAdapter;
+
+import net.cachapa.expandablelayout.ExpandableLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,6 +33,10 @@ public class Order extends AppCompatActivity implements View.OnClickListener {
     private EditText et_tint,et_quality;
     private Button btn_proceed;
     private JSONObject orderObj;
+    private ExpandableLayout expandableLayout;
+    private TextView tv_left;
+    private boolean expandFlag=true;
+    private CardView cv_left;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,7 +62,8 @@ public class Order extends AppCompatActivity implements View.OnClickListener {
 
         findAllViews();
         btn_proceed.setOnClickListener(this);
-        sp_eye.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.EYE));
+        cv_left.setOnClickListener(this);
+//        sp_eye.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.EYE));
 //        sp_type.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.TYPE));
         sp_index.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.INDEX));
 
@@ -71,7 +81,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener {
         sp_coating=(Spinner)findViewById(R.id.sp_coating);
         sp_cylinder=(Spinner)findViewById(R.id.sp_cylinder);
         sp_diameter=(Spinner)findViewById(R.id.sp_diameter);
-        sp_eye=(Spinner)findViewById(R.id.sp_eye);
+//        sp_eye=(Spinner)findViewById(R.id.sp_eye);
         sp_height=(Spinner)findViewById(R.id.sp_height);
         sp_index=(Spinner)findViewById(R.id.sp_index);
         sp_type=(Spinner)findViewById(R.id.sp_type);
@@ -79,11 +89,24 @@ public class Order extends AppCompatActivity implements View.OnClickListener {
         et_tint=(EditText)findViewById(R.id.et_tint);
         et_quality=(EditText)findViewById(R.id.et_quantity);
         btn_proceed=(Button)findViewById(R.id.btn_proceed);
+        expandableLayout=(ExpandableLayout)findViewById(R.id.expand_left);
+        tv_left=(TextView)findViewById(R.id.tv_left);
+        cv_left=(CardView)findViewById(R.id.left_card_view);
     }
 
     @Override
     public void onClick(View view) {
-        if(view==btn_proceed){
+        if(view==cv_left){
+            if(expandFlag) {
+                expandableLayout.expand();
+                expandFlag=false;
+            }
+            else {
+                expandableLayout.collapse();
+                expandFlag=true;
+            }
+        }
+        else if(view==btn_proceed){
             orderObj=new JSONObject();
             boolean flag=true;
             try {
@@ -99,7 +122,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener {
                     flag &=false;
                     et_tint.setError(Validator.getErrorMessage());
                 }
-                orderObj.put("eye",sp_eye.getSelectedItem());
+//                orderObj.put("eye",sp_eye.getSelectedItem());
                 orderObj.put("type",sp_type.getSelectedItem());
                 orderObj.put("index",sp_index.getSelectedItem());
                 orderObj.put("coating",sp_coating.getSelectedItem());
