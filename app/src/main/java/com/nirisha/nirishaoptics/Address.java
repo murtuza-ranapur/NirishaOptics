@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
         Intent oldIntent=getIntent();
         try {
             order=new JSONObject(oldIntent.getStringExtra("order"));
+            Log.e("Address", "Old Json:"+order.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -57,6 +59,7 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view==btn_checkout){
+            JSONObject address=new JSONObject();
             boolean flag=true;
             SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
             try {
@@ -86,20 +89,21 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
                     flag &=false;
                     et_pin.setError(Validator.getErrorMessage());
                 }
-                order.put("user_id",Integer.parseInt(sp.getString("id",null)));
+                address.put("address",et_address_1.getText().toString()+et_address_2.getText().toString());
+                address.put("state",sp_states.getSelectedItem());
+                address.put("city",et_city.getText().toString());
+                address.put("pin",et_pin.getText().toString());
+                address.put("phone",et_add_phone.getText().toString());
+                address.put("kind","common");
                 order.put("address_id",-1);
-                order.put("address",et_address_1.getText().toString()+et_address_2.getText().toString());
-                order.put("state",sp_states.getSelectedItem());
-                order.put("city",et_city.getText().toString());
-                order.put("pin",et_pin.getText().toString());
-                order.put("phone",et_add_phone.getText().toString());
-                order.put("kind","common");
+                order.put("address",address);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             if(flag){
                 NirishaAPIUtil util = NirishaAPIUtil.getInstance();
                 util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
+                Log.e("Address", order.toString());
                 util.doOrder(order,this);
             }
         }

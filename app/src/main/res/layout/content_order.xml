@@ -12,7 +12,7 @@
 
     <ScrollView
         android:layout_width="368dp"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginLeft="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -59,7 +59,7 @@
                     android:id="@+id/tv_left"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Left Eyes"
+                    android:text="Left Eye"
                     android:textSize="20sp"
                     android:padding="10dp"
                     />
@@ -144,6 +144,40 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginTop="8dp"></Spinner>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.7"
+                        android:text="Power Range" />
+                    <TextView
+                        android:id="@+id/tv_pr_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.15"
+                        android:textAlignment="center"
+                        android:padding="2dp"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/power_rounded_back"
+                        android:text="PR" />
+                    <TextView
+                        android:id="@+id/tv_pr_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.15"
+                        android:textAlignment="center"
+                        android:layout_marginLeft="2dp"
+                        android:padding="2dp"
+                        android:textColor="@android:color/white"
+                        android:elevation="1dp"
+                        android:background="@drawable/power_rounded_back"
+                        android:text="PR" />
+
+                </LinearLayout>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -244,7 +278,7 @@
                     android:id="@+id/tv_right"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Right Eyes"
+                    android:text="Right Eye"
                     android:textSize="20sp"
                     android:padding="10dp"
                     />
@@ -329,6 +363,40 @@
                             android:layout_marginBottom="8dp"
                             android:layout_marginTop="8dp"></Spinner>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.7"
+                                android:text="Power Range" />
+                            <TextView
+                                android:id="@+id/tv_pr_1_r"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.15"
+                                android:textAlignment="center"
+                                android:padding="2dp"
+                                android:textColor="@android:color/white"
+                                android:background="@drawable/power_rounded_back"
+                                android:text="PR" />
+                            <TextView
+                                android:id="@+id/tv_pr_2_r"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.15"
+                                android:textAlignment="center"
+                                android:layout_marginLeft="2dp"
+                                android:padding="2dp"
+                                android:textColor="@android:color/white"
+                                android:elevation="1dp"
+                                android:background="@drawable/power_rounded_back"
+                                android:text="PR" />
+
+                        </LinearLayout>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -338,13 +406,13 @@
                             android:id="@+id/sp_sphere_r"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
+
                             android:layout_marginTop="8dp"></Spinner>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="20dp"
                             android:text="Cylinder" />
 
                         <Spinner
@@ -419,10 +487,11 @@
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
             <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp">
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="8dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -439,7 +508,8 @@
                 android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="10dp">
+                tools:layout_editor_absoluteY="0dp"
+                tools:layout_editor_absoluteX="0dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,5 +1,8 @@
 package com.nirisha.nirishaoptics.services;
 
+import android.util.Log;
+import android.widget.TextView;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,4 +60,12 @@ public class Validator {
         return true;
     }
 
+    public static boolean powerRange(double v, double v1, double tv_pr_1, double tv_pr_2) {
+        Log.e("Validator", "powerRange: "+v+" "+v1+" "+" "+tv_pr_1+" "+tv_pr_2+"");
+        double pr=v+v1;
+        if(pr==tv_pr_1 || pr==tv_pr_2)
+            return true;
+        else
+            return false;
+    }
 }

@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -31,16 +32,9 @@ public class DynamicValues {
     public void init(Context context){
         nirisha = context.openOrCreateDatabase("nirisha",MODE_PRIVATE,null);
     }
-    public List<String> getProduct()
-    {
-        List<String> prods=new ArrayList<>();
-        Cursor r=nirisha.rawQuery("select distinct product from product",null);
-        r.moveToFirst();
-        while(!r.isAfterLast()){
-            prods.add(r.getString(0));
-            r.moveToNext();
-        }
-        return prods;
+    public List<String> getProduct() {
+        Collections.sort(this.product);
+        return this.product;
     }
 
     public void setProduct(List<String> product) {

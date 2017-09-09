@@ -36,7 +36,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -276,6 +279,7 @@ public class NirishaAPIUtil {
                 try {
                     JSONObject result=new JSONObject(response);
                     JSONArray results=result.getJSONArray("result");
+                    Set<String> set=new HashSet<>();
                     for (int i=0;i<results.length();i++){
                         JSONObject prods=results.getJSONObject(i);
                         String product=prods.getString("product");
@@ -306,8 +310,9 @@ public class NirishaAPIUtil {
                             prices[k]=price.getString(k);
                         }
                         nirisha.execSQL("insert into product (product,indx,dia,fh1,fh2,fh3,prup,prdown) " +
-                                "values ('"+wordFirstCap(product)+"',"+index+","+dia+","+fhs[0]+","+fhs[1]+","+fhs[2]+","+prs[0]+","+prs[0]+")");
+                                "values ('"+wordFirstCap(product.toLowerCase())+"',"+index+","+dia+","+fhs[0]+","+fhs[1]+","+fhs[2]+","+prs[0]+","+prs[1]+")");
                         long prod_id=0;
+                        set.add(wordFirstCap(product.toLowerCase()));
                         String query = "SELECT ROWID from product order by ROWID DESC limit 1";
                         Cursor c = nirisha.rawQuery(query,null);
                         if (c != null && c.moveToFirst()) {
@@ -318,7 +323,11 @@ public class NirishaAPIUtil {
                             nirisha.execSQL("insert into coatingprice (product_id,coating,price) " +
                                     "values ("+prod_id+",'"+coatings[k]+"',"+prices[k]+")");
                         }
+
                     }
+                    DynamicValues dv=DynamicValues.getInstance();
+                    dv.setProduct(new ArrayList<>(set));
+                    dv.setFlag();
                     dialog.cancel();
                 } catch (JSONException e) {
                     e.printStackTrace();

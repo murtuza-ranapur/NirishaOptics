@@ -41,17 +41,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tv_signin.setOnClickListener(this);
         login.setOnClickListener(this);
         SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
-        NirishaAPIUtil util=NirishaAPIUtil.getInstance();
-        util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
-        util.getProducts(this);
-//        if(sp.getString("id",null)!=null) {
-//            intent = new Intent(this, Order.class);
-//            finish();
-//            startActivity(intent);
-//        }
-//        NirishaAPIUtil util=NirishaAPIUtil.getInstance();
-//        util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
-//        util.getProducts(this);
+        if(sp.getString("id",null)!=null) {
+            intent = new Intent(this, Order.class);
+            finish();
+            startActivity(intent);
+        }
+
     }
 
     private void findAllElements() {
