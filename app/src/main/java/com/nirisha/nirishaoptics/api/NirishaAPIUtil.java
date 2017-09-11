@@ -37,6 +37,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -199,13 +200,15 @@ public class NirishaAPIUtil {
                     if (resObject.has("code"))
                     if(resObject.getInt("code")==200){
                         final AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
-                        dlgAlert.setMessage(resObject.getString("msg"));
+                        dlgAlert.setMessage("Your Order has been successfully placed. You will soon receive " +
+                                "confirmation mail.");
                         dlgAlert.setTitle("Message");
                         dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
                                 intent = new Intent(context, Order.class);
+                                intent.putExtra("session",1);
                                 ((Activity) context).finish();
                                 context.startActivity(intent);
                             }
@@ -238,6 +241,50 @@ public class NirishaAPIUtil {
                 Toast.makeText(context,error.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+        queue.add(req);
+    }
+
+    public void getOrders(final Context context){
+        dialog = ProgressDialog.show(context, "","Please Wait",true);
+        RequestQueue queue = Volley.newRequestQueue(context);
+        CustomStringRequest req=new CustomStringRequest(
+                Request.Method.GET,
+                NirishaAPI.APi_ORDER_GETTER.getText() + "id=" + id,
+                headers, "", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    JSONObject orders=new JSONObject(response);
+                    if(orders.length()==0){
+                        dialog.cancel();
+                    }
+                    else {
+                        Map<String,JSONObject> orderList=new HashMap<>();
+                        Iterator<String> keys=orders.keys();
+                        while (keys.hasNext()){
+                            String key=keys.next();
+                            Log.e("getOrders", "onResponse: "+key);
+                            orderList.put(key,orders.getJSONObject(key));
+                        }
+                        DynamicValues.getInstance().setOrderData(orderList);
+                        DynamicValues.getInstance().setOrderFlag();
+                        dialog.cancel();
+                    }
+                }catch (JSONException e){
+                    e.printStackTrace();
+                    dialog.cancel();
+                }
+
+            }
+        },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.e("getOrders", "onErrorResponse: something went Wrong" );
+                        dialog.cancel();
+                    }
+                }
+        );
         queue.add(req);
     }
 

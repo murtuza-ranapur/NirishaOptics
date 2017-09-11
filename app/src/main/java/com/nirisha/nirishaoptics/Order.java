@@ -1,6 +1,7 @@
 package com.nirisha.nirishaoptics;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,20 +56,25 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_order);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        final Context context=this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent=new Intent(context,OrderList.class);
+                startActivity(intent);
             }
         });
         SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
-        NirishaAPIUtil util = NirishaAPIUtil.getInstance();
-        util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
-        util.getProducts(this);
-
+        Intent oldIntent=getIntent();
+        int flag;
+        flag=oldIntent.getIntExtra("session",0);
+        Log.e("Order", "Old Session:"+flag);
+        if(flag==0) {
+            NirishaAPIUtil util = NirishaAPIUtil.getInstance();
+            util.init(Integer.parseInt(sp.getString("id", null)), sp.getString("auth", null));
+            util.getProducts(this);
+        }
         Thread waiter=new Thread(new ValueUpdater());
         waiter.start();
 
@@ -432,7 +438,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
                         right.put("cylinder", sp_cylinder_r.getSelectedItem());
                         right.put("axis", sp_axis_r.getSelectedItem());
                         right.put("addition", sp_addition_r.getSelectedItem());
-                        right.put("height", sp_height_r.getSelectedItem());
+                        right.put("height", sp_height_r.getSelectedItem()==null?"0":sp_height_r.getSelectedItem());
                         right.put("qty", Integer.parseInt(et_quality_r.getText().toString()));
                         right.put("tint", et_tint_r.getText().toString());
                         right.put("price", getPrice(nirisha,sp_type_r.getSelectedItem().toString(),sp_index_r.getSelectedItem().toString(),

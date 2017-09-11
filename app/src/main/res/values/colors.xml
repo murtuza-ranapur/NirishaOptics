@@ -11,4 +11,6 @@
     <color name="floatLabel">#8b607d</color>
     <color name="normal">#505050</color>
     <color name="activated">#343333</color>
+
+    <color name="divider">#d6d5d5</color>
 </resources>

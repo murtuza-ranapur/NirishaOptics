@@ -61,7 +61,7 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
         if(view==btn_checkout){
             JSONObject address=new JSONObject();
             boolean flag=true;
-            SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
+
             try {
                 if(Validator.forEmpty(et_add_phone.getText().toString()))
                     flag &=true;
@@ -89,7 +89,7 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
                     flag &=false;
                     et_pin.setError(Validator.getErrorMessage());
                 }
-                address.put("address",et_address_1.getText().toString()+et_address_2.getText().toString());
+                address.put("address",et_address_1.getText().toString()+"|"+et_address_2.getText().toString());
                 address.put("state",sp_states.getSelectedItem());
                 address.put("city",et_city.getText().toString());
                 address.put("pin",et_pin.getText().toString());
@@ -101,10 +101,11 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
                 e.printStackTrace();
             }
             if(flag){
-                NirishaAPIUtil util = NirishaAPIUtil.getInstance();
-                util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
                 Log.e("Address", order.toString());
-                util.doOrder(order,this);
+                Intent in = new Intent(this, Summary.class);
+                in.putExtra("order",order.toString());
+                startActivity(in);
+
             }
         }
     }

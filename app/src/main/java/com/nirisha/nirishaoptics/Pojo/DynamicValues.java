@@ -6,9 +6,13 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -21,6 +25,10 @@ public class DynamicValues {
     private List<String> coating=new ArrayList<>();
     private volatile boolean flag=false;
     private SQLiteDatabase nirisha;
+
+    private Map<String,JSONObject> orderData;
+    private volatile boolean orderFlag=false;
+
     private DynamicValues(){}
     private static class DynamicValuesHelper{
         private static final DynamicValues INSTANCE=new DynamicValues();
@@ -49,10 +57,21 @@ public class DynamicValues {
         this.coating = coating;
     }
 
+    public Map<String, JSONObject> getOrderData() {
+        return orderData;
+    }
+
+    public void setOrderData(Map<String, JSONObject> orderData) {
+        this.orderData = orderData;
+    }
+
     public void setFlag(){
         flag=true;
     }
     public boolean isSet(){
         return flag;
     }
+
+    public void setOrderFlag(){orderFlag=true;}
+    public boolean isOrderFlagSet(){return  orderFlag;}
 }
