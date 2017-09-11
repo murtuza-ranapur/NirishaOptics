@@ -6,11 +6,17 @@
     <color name="button">#607d8b</color>
     <color name="text">#455a64</color>
     <color name="background">#eceff1</color>
-    <color name="background_dark">#607d8b</color>
+    <color name="background_dark">#ccd1d1</color>
 
     <color name="floatLabel">#8b607d</color>
     <color name="normal">#505050</color>
     <color name="activated">#343333</color>
 
     <color name="divider">#d6d5d5</color>
+
+    <color name="listhead">#17202a</color>
+    <color name="text_grey">#99a3a4</color>
+    <color name="status">#28b463</color>
+    <color name="amount">#b7950b</color>
+
 </resources>

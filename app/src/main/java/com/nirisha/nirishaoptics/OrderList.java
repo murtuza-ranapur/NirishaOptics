@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 public class OrderList extends AppCompatActivity {
 
@@ -45,6 +48,14 @@ public class OrderList extends AppCompatActivity {
 
         sa=new SimpleAdapter(this,data,R.layout.complex_layout_order_list,from,to);
         listView.setAdapter(sa);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.e("Clicked", "onItemClick: "+((HashMap<String,String>)sa.getItem(i)).get("ordernum"));
+
+            }
+        });
     }
 
     private void populate() {
@@ -79,7 +90,7 @@ public class OrderList extends AppCompatActivity {
                 }
 
                 val.put("amount",obj.getString("total"));
-                val.put("status",obj.getString("status"));
+                val.put("status",obj.getString("status").toUpperCase());
                 val.put("date",obj.getString("date"));
                 data.add(val);
             }
