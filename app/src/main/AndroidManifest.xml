@@ -26,7 +26,8 @@
         <activity android:name=".Address" />
         <activity android:name=".Summary" />
         <activity android:name=".Test" />
-        <activity android:name=".OrderList"></activity>
+        <activity android:name=".OrderList" />
+        <activity android:name=".Bill"></activity>
     </application>
 
 </manifest>

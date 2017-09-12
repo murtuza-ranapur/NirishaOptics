@@ -43,7 +43,20 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
             e.printStackTrace();
         }
 
+        populate();
         btn_checkout.setOnClickListener(this);
+    }
+
+    private void populate() {
+        SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
+        if(sp.getString("phone",null)!=null) {
+            et_add_phone.setText(sp.getString("phone", null));
+            String[] address = sp.getString("address",null).split("\\|");
+            et_address_1.setText(address[0]);
+            et_address_2.setText(address[1]);
+            et_city.setText(sp.getString("city",null));
+            et_pin.setText(sp.getString("pin",null));
+        }
     }
 
     private void findAllViews() {
@@ -89,14 +102,24 @@ public class Address extends AppCompatActivity implements View.OnClickListener {
                     flag &=false;
                     et_pin.setError(Validator.getErrorMessage());
                 }
+                SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
+                SharedPreferences.Editor edit=sp.edit();
+
                 address.put("address",et_address_1.getText().toString()+"|"+et_address_2.getText().toString());
+                edit.putString("address",address.getString("address"));
                 address.put("state",sp_states.getSelectedItem());
+                edit.putString("state",address.getString("state"));
                 address.put("city",et_city.getText().toString());
+                edit.putString("city",address.getString("city"));
                 address.put("pin",et_pin.getText().toString());
+                edit.putString("pin",address.getString("pin"));
                 address.put("phone",et_add_phone.getText().toString());
+                edit.putString("phone",address.getString("phone"));
                 address.put("kind","common");
                 order.put("address_id",-1);
                 order.put("address",address);
+
+                edit.apply();
             } catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,7 @@
 package com.nirisha.nirishaoptics;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -53,7 +55,9 @@ public class OrderList extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.e("Clicked", "onItemClick: "+((HashMap<String,String>)sa.getItem(i)).get("ordernum"));
-
+                Intent in=new Intent(getApplicationContext(),Summary.class);
+                in.putExtra("num",((HashMap<String,String>)sa.getItem(i)).get("ordernum"));
+                startActivity(in);
             }
         });
     }
@@ -62,7 +66,9 @@ public class OrderList extends AppCompatActivity {
         try {
             Map<String, JSONObject> vals = DynamicValues.getInstance().getOrderData();
             Set<String> keys = vals.keySet();
-            Iterator<String> it = keys.iterator();
+            ArrayList<String> newKeys=new ArrayList<>(keys);
+            Collections.sort(newKeys,Collections.reverseOrder());
+            Iterator<String> it = newKeys.iterator();
             while (it.hasNext()) {
                 HashMap<String, String> val = new HashMap<>();
                 String ordnum = it.next();
