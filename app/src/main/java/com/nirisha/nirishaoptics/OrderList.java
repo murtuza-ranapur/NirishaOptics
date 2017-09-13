@@ -3,13 +3,16 @@ package com.nirisha.nirishaoptics;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.nirisha.nirishaoptics.Pojo.DynamicValues;
 import com.nirisha.nirishaoptics.api.NirishaAPIUtil;
@@ -39,7 +42,6 @@ public class OrderList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_list);
         findAllViews();
-
         SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
         NirishaAPIUtil util = NirishaAPIUtil.getInstance();
         util.init(Integer.parseInt(sp.getString("id", null)), sp.getString("auth", null));
