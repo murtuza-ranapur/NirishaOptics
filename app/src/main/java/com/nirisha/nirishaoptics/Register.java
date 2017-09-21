@@ -104,7 +104,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             }
             if(flag) {
                 NirishaAPIUtil util = NirishaAPIUtil.getInstance();
-                util.doRegister(regObj, this);
+                util.doSendOtp(this,regObj);
+
+                Intent in=new Intent(this,Otp.class);
+                in.putExtra("reg",regObj.toString());
+                startActivity(in);
             }
         }
     }

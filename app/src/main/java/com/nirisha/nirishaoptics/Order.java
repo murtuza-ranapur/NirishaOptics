@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -38,7 +39,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import me.toptas.fancyshowcase.FancyShowCaseView;
+
 
 public class Order extends AppCompatActivity implements View.OnClickListener{
 
@@ -54,6 +60,8 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
     private boolean expandFlagLeft =false,expandFlagRight=false;
     private CardView cv_left,cv_right;
     private SQLiteDatabase nirisha;
+    private static final String TAG="Order";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,11 +87,19 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
             NirishaAPIUtil util = NirishaAPIUtil.getInstance();
             util.init(Integer.parseInt(sp.getString("id", null)), sp.getString("auth", null));
             util.getProducts(this);
+
+            //https://android-arsenal.com/details/1/5440
+//            Log.e(TAG, "onCreate: "+Calendar.getInstance().getTime() );
+//            new FancyShowCaseView.Builder(this)
+//                    .focusOn(fab)
+//                    .title("View Your Orders")
+//                    .build()
+//                    .show();
         }
         Thread waiter=new Thread(new ValueUpdater());
         waiter.start();
-
         findAllViews();
+
 
         sp_index.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.INDEX));
         sp_diameter.setAdapter(ValueAdapter.getAdapter(this,ValueAdapter.DIAMETER));
@@ -112,7 +128,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
 
                 List<String> index= getListFromDb(nirisha,"indx",(String)sp_type.getSelectedItem());
                 List<String> coating= getListFromDb(nirisha,"coating",(String)sp_type.getSelectedItem());
-                List<String> dia= getListFromDb(nirisha,"dia",(String)sp_type.getSelectedItem());
+//                List<String> dia= getListFromDb(nirisha,"dia",(String)sp_type.getSelectedItem());
                 ArrayAdapter<String> aAdapter=new ArrayAdapter<>(Order.this,android.R.layout.simple_spinner_item,index);
                 aAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sp_index.setAdapter(aAdapter);
@@ -121,13 +137,13 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
                 bAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 sp_coating.setAdapter(bAdapter);
 
-                ArrayAdapter<String> cAdapter=new ArrayAdapter<>(Order.this,android.R.layout.simple_spinner_item,dia);
-                cAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                sp_diameter.setAdapter(cAdapter);
+//                ArrayAdapter<String> cAdapter=new ArrayAdapter<>(Order.this,android.R.layout.simple_spinner_item,dia);
+//                cAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                sp_diameter.setAdapter(cAdapter);
 
                 List<List<String>> list=getListFromDbLine(nirisha,(String)sp_type.getSelectedItem(),
                         (String)sp_index.getSelectedItem(),
-                        (String)sp_diameter.getSelectedItem(),
+//                        (String)sp_diameter.getSelectedItem(),
                         (String)sp_coating.getSelectedItem());
 
                 List<String> fh=list.get(0);
@@ -186,7 +202,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
 
                 List<List<String>> list=getListFromDbLine(nirisha,(String)sp_type_r.getSelectedItem(),
                         (String)sp_index_r.getSelectedItem(),
-                        (String)sp_diameter_r.getSelectedItem(),
+//                        (String)sp_diameter_r.getSelectedItem(),
                         (String)sp_coating_r.getSelectedItem());
 
                 List<String> fh=list.get(0);
@@ -248,12 +264,12 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
         return super.onOptionsItemSelected(item);
     }
 
-    private List<List<String>> getListFromDbLine(SQLiteDatabase nirisha, String type, String index, String diameter, String coating) {
+    private List<List<String>> getListFromDbLine(SQLiteDatabase nirisha, String type, String index, String coating) {
         Log.e("Drop Vals", "getListFromDbLine: begin");
         List<String> pr=new ArrayList<>();
         List<String> fh=new ArrayList<>();
         List<List<String>> list= new ArrayList<>();
-        Cursor c=nirisha.rawQuery("select prdown,prup,fh1,fh2,fh3 from product p join coatingprice cp on p.id=cp.product_id where p.product = '"+type+"' and p.indx="+index+" and dia="+diameter+" and coating ='"+coating+"';",null);
+        Cursor c=nirisha.rawQuery("select prdown,prup,fh1,fh2,fh3 from product p join coatingprice cp on p.id=cp.product_id where p.product = '"+type+"' and p.indx="+index+" and coating ='"+coating+"';",null);
         c.moveToFirst();
         if(c.getCount()>0)
         {
@@ -295,7 +311,7 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
     }
 
     private double getPrice(SQLiteDatabase nirisha,String type, String index, String diameter, String coating){
-        Cursor c=nirisha.rawQuery("select price from product p join coatingprice cp on p.id=cp.product_id where p.product = '"+type+"' and p.indx="+index+" and dia="+diameter+" and coating ='"+coating+"';",null);
+        Cursor c=nirisha.rawQuery("select price from product p join coatingprice cp on p.id=cp.product_id where p.product = '"+type+"' and p.indx="+index+"  and coating ='"+coating+"';",null);
         c.moveToFirst();
         if(c.getCount()>0) {
             Log.e("Order", "getPrice: "+c.getDouble(0) );
@@ -377,19 +393,19 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
                             Double.parseDouble(tv_pr_2.getText().toString())))
                         flag &= true;
                     else {
-                        flag &= false;
-                        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-                        dlgAlert.setMessage("Summation of Sphere and Cylinder should be either "+tv_pr_1.getText()+" or "+tv_pr_2.getText()+". " +
-                                "Please set values accordingly");
-                        dlgAlert.setTitle("Invalid Value");
-                        dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                        dlgAlert.setCancelable(true);
-                        dlgAlert.create().show();
+                        flag &= true;
+//                        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+//                        dlgAlert.setMessage("Summation of left lens' Sphere and Cylinder is neither "+tv_pr_1.getText()+" or "+tv_pr_2.getText()+". " +
+//                                "Prices may vary now in the actual bill");
+//                        dlgAlert.setTitle("Invalid Value");
+//                        dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                dialogInterface.cancel();
+//                            }
+//                        });
+//                        dlgAlert.setCancelable(true);
+//                        dlgAlert.create().show();
                     }
                     if (Validator.forEmpty(et_quality.getText().toString())  && Integer.parseInt(et_quality.getText().toString())>0)
                         flag &= true;
@@ -430,20 +446,20 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
                             Double.parseDouble(tv_pr_2_r.getText().toString())))
                         flag &= true;
                     else {
-                        flag &= false;
-                        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
-                        dlgAlert.setMessage("Summation of Sphere and Cylinder should be either " +
-                                ""+tv_pr_1_r.getText()+" or "+tv_pr_2_r.getText()+". " +
-                                "Please set values accordingly");
-                        dlgAlert.setTitle("Invalid Value");
-                        dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.cancel();
-                            }
-                        });
-                        dlgAlert.setCancelable(true);
-                        dlgAlert.create().show();
+                        flag &= true;
+//                        AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(this);
+//                        dlgAlert.setMessage("Summation of right lens' Sphere and Cylinder is neither " +
+//                                ""+tv_pr_1_r.getText()+" or "+tv_pr_2_r.getText()+". " +
+//                                "Prices may vary now in the actual bill");
+//                        dlgAlert.setTitle("Invalid Value");
+//                        dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                                dialogInterface.cancel();
+//                            }
+//                        });
+//                        dlgAlert.setCancelable(true);
+//                        dlgAlert.create().show();
                     }
                     if (Validator.forEmpty(et_quality_r.getText().toString()) && Integer.parseInt(et_quality_r.getText().toString())>0)
                         flag &= true;
@@ -512,5 +528,6 @@ public class Order extends AppCompatActivity implements View.OnClickListener{
             });
         }
     }
+
 
 }

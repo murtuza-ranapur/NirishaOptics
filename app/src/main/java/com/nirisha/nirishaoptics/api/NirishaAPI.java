@@ -11,6 +11,7 @@ public enum NirishaAPI {
     API_VALUES("http://nirisha1q2w3e.000webhostapp.com/Getters/EnumGetter.php?"),
     API_PRODUCTS("http://nirisha1q2w3e.000webhostapp.com/Getters/ProductGetter.php?"),
     APi_ORDER_GETTER("http://nirisha1q2w3e.000webhostapp.com/Getters/OrderGetter.php?"),
+    API_ORDER_DELETER("http://nirisha1q2w3e.000webhostapp.com/Deleters/OrderDeleter.php?"),
     API_ORDER("https://nirisha1q2w3e.000webhostapp.com/CoreService.php?key=order&");
 
     private String text;

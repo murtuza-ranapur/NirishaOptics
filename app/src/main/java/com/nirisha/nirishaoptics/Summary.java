@@ -30,6 +30,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener {
     private TextView tv_total,tv_cgst,tv_sgst,tv_payable;
     private TextView tv_title;
     private boolean modeView=false;
+    private int orderNum;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +40,7 @@ public class Summary extends AppCompatActivity implements View.OnClickListener {
         Intent oldIntent=getIntent();
         String num=oldIntent.getStringExtra("num");
         Log.e("Summary", ""+num);
+        orderNum=Integer.parseInt(num);
         if(num==null || num.isEmpty()) {
             Log.e("Summary", "Failed" );
             try {
@@ -52,7 +54,8 @@ public class Summary extends AppCompatActivity implements View.OnClickListener {
             Map<String, JSONObject> vals = DynamicValues.getInstance().getOrderData();
             order = vals.get(num);
             modeView = true;
-            paybutton.setVisibility(View.GONE);
+            paybutton.setText("Delete");
+//            paybutton.setVisibility(View.GONE);
             tv_title.setText("Order#"+num);
             Log.e("Summary", order.toString());
         }
@@ -179,10 +182,19 @@ public class Summary extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         if(view==paybutton){
 
-            SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
-            NirishaAPIUtil util = NirishaAPIUtil.getInstance();
-            util.init(Integer.parseInt(sp.getString("id",null)),sp.getString("auth",null));
-            util.doOrder(order,this);
+            if(modeView){
+                SharedPreferences sp = getSharedPreferences("Nirisha", MODE_PRIVATE);
+                NirishaAPIUtil util = NirishaAPIUtil.getInstance();
+                util.init(Integer.parseInt(sp.getString("id", null)), sp.getString("auth", null));
+                util.doDeleteOrder(this,orderNum);
+            }
+            else
+            {
+                SharedPreferences sp = getSharedPreferences("Nirisha", MODE_PRIVATE);
+                NirishaAPIUtil util = NirishaAPIUtil.getInstance();
+                util.init(Integer.parseInt(sp.getString("id", null)), sp.getString("auth", null));
+                util.doOrder(order, this);
+            }
         }
     }
 }

@@ -71,7 +71,7 @@ public class ValueAdapter {
                 return adapter;
             case CYLINDER:
                 List<String> cylinder=new ArrayList<>();
-                for(double i=-4.50;i<=4.50;i+=0.25)
+                for(double i=-8;i<=8;i+=0.25)
                     cylinder.add(String.valueOf(i));
                 adapter=new ArrayAdapter<>(context,android.R.layout.simple_spinner_item,cylinder);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

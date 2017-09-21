@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -34,12 +35,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -54,6 +57,10 @@ public class NirishaAPIUtil {
     private Map<String,String> headers=null;
     private ProgressDialog dialog;
     private Intent intent;
+
+    private String authKey="174724ABcDF88Q2HC59bb694f";
+    private String senderid="NIROPC";
+
 
     private NirishaAPIUtil() {
     }
@@ -81,7 +88,6 @@ public class NirishaAPIUtil {
             @Override
             public void onResponse(String response) {
                 dialog.cancel();
-//                Toast.makeText(context,response,Toast.LENGTH_LONG).show();
                 intent=new Intent(context,MainActivity.class);
                 ((Activity)context).finish();
                 context.startActivity(intent);
@@ -184,6 +190,34 @@ public class NirishaAPIUtil {
         queue.add(req);
     }
 
+
+    public void doDeleteOrder(final Context context,int order){
+        dialog = ProgressDialog.show(context, "","Please Wait",true);
+        Log.e("Util", "doDeleteOrder: "+NirishaAPI.API_ORDER_DELETER.getText()+"id="+id+"&order="+order );
+        RequestQueue queue = Volley.newRequestQueue(context);
+        CustomStringRequest req=new CustomStringRequest(
+                Request.Method.GET,
+                NirishaAPI.API_ORDER_DELETER.getText()+"id="+id+"&order="+order,
+                headers,"", new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.e("DoOrderDelete", "onResponse: "+response );
+                dialog.cancel();
+                intent = new Intent(context, Order.class);
+                intent.putExtra("session",1);
+                ((Activity) context).finish();
+                context.startActivity(intent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                dialog.cancel();
+                Log.e("DoOrderDelete", "onErrorResponse: "+error.getMessage() );
+            }
+        });
+        queue.add(req);
+    }
+
     public void doOrder(JSONObject payload, final Context context){
         dialog = ProgressDialog.show(context, "","Placing Order..",true);
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -274,13 +308,12 @@ public class NirishaAPIUtil {
                     e.printStackTrace();
                     dialog.cancel();
                 }
-
             }
         },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("getOrders", "onErrorResponse: something went Wrong" );
+                        Log.e("getOrders", "onErrorResponse: something went Wrong"+error.getMessage() );
                         dialog.cancel();
                     }
                 }
@@ -395,6 +428,121 @@ public class NirishaAPIUtil {
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         queue.add(req);
+    }
+
+    public void doSendOtp(final Context context,JSONObject object){
+        try {
+            Random rand=new Random();
+            int otp = 1000+rand.nextInt(9000);
+            String url = String.format("https://control.msg91.com/api/sendotp.php?authkey=%s&mobile=%s" +
+                            "&message=%s&sender=%s&otp=%s", Uri.encode(authKey), Uri.encode("91" + object.getString("phone")),
+                    Uri.encode("Your OTP is " + otp),Uri.encode(senderid), Uri.encode("" + otp));
+            Log.e("Util", "doSendOtp url: "+url );
+            RequestQueue queue = Volley.newRequestQueue(context);
+            CustomStringRequest req=new CustomStringRequest(
+                    Request.Method.GET,
+                    url,
+                    headers, "", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("Send Opt", "onResponse: "+response);
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("SendOtp", "onErrorResponse: something went Wrong" );
+                        }
+                    }
+            );
+            queue.add(req);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void doResendOtp(final Context context,JSONObject object){
+        try {
+            String url = String.format("https://control.msg91.com/api/retryotp.php?" +
+                            "authkey=%s&mobile=%s&retrytype=voice", Uri.encode(authKey), Uri.encode("91" + object.getString("phone")));
+            Log.e("Util", "doSendOtp url: "+url );
+            RequestQueue queue = Volley.newRequestQueue(context);
+            CustomStringRequest req=new CustomStringRequest(
+                    Request.Method.GET,
+                    url,
+                    headers, "", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("ReSend Opt", "onResponse: "+response);
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("ReSendOtp", "onErrorResponse: something went Wrong" );
+                        }
+                    }
+            );
+            queue.add(req);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void doVerifyOtp(final Context context, final JSONObject object, String otp){
+        try {
+            dialog = ProgressDialog.show(context, "","Please Wait",true);
+            String url = String.format("https://control.msg91.com/api/verifyRequestOTP.php?" +
+                            "authkey=%s&mobile=%s&otp=%s", Uri.encode(authKey),
+                    Uri.encode("91" + object.getString("phone")),
+                    Uri.encode(otp));
+            Log.e("Util", "doSendOtp url: "+url );
+            RequestQueue queue = Volley.newRequestQueue(context);
+            CustomStringRequest req=new CustomStringRequest(
+                    Request.Method.GET,
+                    url,
+                    headers, "", new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    Log.e("Verify Opt", "onResponse: "+response);
+                    try{
+                        JSONObject rep=new JSONObject(response);
+                        if(rep.getString("type").equalsIgnoreCase("success")){
+                            dialog.cancel();
+                            doRegister(object,context);
+                        }
+                        else {
+                            dialog.cancel();
+                            final AlertDialog.Builder dlgAlert  = new AlertDialog.Builder(context);
+                            dlgAlert.setMessage("Invalid Otp Entered please re-enter OTP or try Resend OTP to receive voice message");
+                            dlgAlert.setTitle("Message");
+                            dlgAlert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+                            dlgAlert.setCancelable(true);
+                            dlgAlert.create().show();
+                        }
+                    }catch (JSONException e){
+                        e.printStackTrace();
+                        dialog.cancel();
+                    }
+                }
+            },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e("VerifyOtp", "onErrorResponse: something went Wrong" );
+                            dialog.cancel();
+                        }
+                    }
+            );
+            queue.add(req);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
     }
 
     public String wordFirstCap(String str)

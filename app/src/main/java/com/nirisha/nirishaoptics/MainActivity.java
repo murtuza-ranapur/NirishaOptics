@@ -1,12 +1,13 @@
 package com.nirisha.nirishaoptics;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,7 +19,11 @@ import com.nirisha.nirishaoptics.services.Validator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -42,9 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login.setOnClickListener(this);
         SharedPreferences sp=getSharedPreferences("Nirisha",MODE_PRIVATE);
         if(sp.getString("id",null)!=null) {
-            intent = new Intent(this, Order.class);
-            finish();
-            startActivity(intent);
+            CheckConnection cc=new CheckConnection();
+            cc.execute();
         }
 
     }
@@ -109,5 +113,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         return result;
+    }
+
+    class CheckConnection extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            return String.valueOf(isOnline());
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            Log.e(TAG, "onPostExecute: "+s );
+            if(s.equalsIgnoreCase("true")) {
+                intent = new Intent(MainActivity.this, Order.class);
+                finish();
+                startActivity(intent);
+            }
+        }
+
+        public boolean isOnline() {
+            try {
+                int timeoutMs = 1500;
+                Socket sock = new Socket();
+                SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
+
+                sock.connect(sockaddr, timeoutMs);
+                sock.close();
+
+                return true;
+            } catch (IOException e) { return false; }
+        }
     }
 }
